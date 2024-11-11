@@ -37,6 +37,7 @@ jobs:
           cp -r ./docs/* .
           git add .
           git commit -m "Update Helm chart repository index" || echo "No changes to commit"
+          git pull --rebase origin gh-pages
           git push -u https://${{ secrets.HELM_TOKEN }}@github.com/Gad-Ongoro/helm-charts.git gh-pages
 
       - name: Merge gh-pages into main
