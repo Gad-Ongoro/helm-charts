@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  gochart:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2024-11-11T20:10:42.5991665Z"
+    description: A Helm chart for deploying GOFoods microservices
+    digest: 6f2a09da16c7d5ec3f455e11fbb68db7385c9c5c823c28332b9d4ec0c2651ad3
+    name: gochart
+    urls:
+    - https://Gad-Ongoro.github.io/helm-charts/gochart-0.1.0.tgz
+    version: 0.1.0
+generated: "2024-11-11T20:10:42.598682736Z"
