@@ -1,0 +1,54 @@
+app:
+  name: gofoods-server
+  namespace: default
+
+api:
+  replicaCount: 1
+  image:
+    repository: docker.io/gadongoro1/gofoods-server
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  service:
+    type: ClusterIP
+    port: 8000
+
+products:
+  replicaCount: 1
+  image:
+    repository: docker.io/gadongoro1/gofoods-product-service
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  service:
+    type: ClusterIP
+    port: 8000
+
+ingress:
+  enabled: true
+  host: localhost
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+service:
+  port: 80
+
+serviceAccount:
+  create: false
+  name: my-custom-serviceaccount
+  automount: true
+

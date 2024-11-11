@@ -1,0 +1,143 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-products
+  namespace: {{ .Values.app.namespace }}
+spec:
+  replicas: {{ .Values.products.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-products
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-products
+    spec:
+      containers:
+        - name: products
+          image: "{{ .Values.products.image.repository }}:{{ .Values.products.image.tag }}"
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: SECRET_KEY
+            - name: DEBUG
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: DEBUG
+            - name: PRODUCTS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: PRODUCTS_DATABASE_URL
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_PASSWORD
+            - name: REDIS_DB
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_DB
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_CLOUD_NAME
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_API_KEY
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_API_SECRET
+            - name: EMAIL_HOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: EMAIL_HOST_PASSWORD
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: AFRICAS_TALKING_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: AFRICAS_TALKING_API_KEY
+            - name: AFRICAS_TALKING_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: AFRICAS_TALKING_USERNAME
+            - name: MPESA_BUSINESS_SHORTCODE
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_BUSINESS_SHORTCODE
+            - name: MPESA_PASSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_PASSKEY
+            - name: MPESA_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CONSUMER_KEY
+            - name: MPESA_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CONSUMER_SECRET
+            - name: MPESA_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CALLBACK_URL
+          resources:
+            limits:
+              cpu: {{ .Values.products.resources.limits.cpu }}
+              memory: {{ .Values.products.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.products.resources.requests.cpu }}
+              memory: {{ .Values.products.resources.requests.memory }}
+          ports:
+            - containerPort: {{ .Values.products.service.port }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-products
+  namespace: {{ .Values.app.namespace }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.products.service.port }}
+      targetPort: {{ .Values.products.service.port }}
+      protocol: TCP
+  selector:
+    app: {{ .Release.Name }}-products

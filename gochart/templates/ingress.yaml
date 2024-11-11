@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-gofoods-server-ingress
+  namespace: {{ .Values.app.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  number: {{ .Values.api.service.port }}
+          - path: /products
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Release.Name }}-products
+                port:
+                  number: {{ .Values.products.service.port }}

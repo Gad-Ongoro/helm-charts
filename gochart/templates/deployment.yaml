@@ -1,0 +1,133 @@
+{{- range $name, $service := $.Values.microservices }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ $name }}-deployment
+  namespace: {{ $.Values.app.namespace }}
+spec:
+  replicas: {{ $service.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+        - name: {{ $name }}
+          image: {{ $service.image.repository }}:{{ $service.image.tag }}
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: SECRET_KEY
+            - name: DEBUG
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: DEBUG
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: DATABASE_URL
+            - name: PRODUCTS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: PRODUCTS_DATABASE_URL
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_PORT
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_PASSWORD
+            - name: REDIS_DB
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: REDIS_DB
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_CLOUD_NAME
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_API_KEY
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: CLOUDINARY_API_SECRET
+            - name: EMAIL_HOST_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: EMAIL_HOST_PASSWORD
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: GOOGLE_CLIENT_SECRET
+            - name: AFRICAS_TALKING_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: AFRICAS_TALKING_API_KEY
+            - name: AFRICAS_TALKING_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: AFRICAS_TALKING_USERNAME
+            - name: MPESA_BUSINESS_SHORTCODE
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_BUSINESS_SHORTCODE
+            - name: MPESA_PASSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_PASSKEY
+            - name: MPESA_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CONSUMER_KEY
+            - name: MPESA_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CONSUMER_SECRET
+            - name: MPESA_CALLBACK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: go-secrets
+                  key: MPESA_CALLBACK_URL
+          resources:
+            limits:
+              cpu: "{{ $service.resources.limits.cpu }}"
+              memory: "{{ $service.resources.limits.memory }}"
+            requests:
+              cpu: "{{ $service.resources.requests.cpu | default "100m" }}"
+              memory: "{{ $service.resources.requests.memory | default "128Mi" }}"
+{{- end }}
