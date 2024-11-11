@@ -38,3 +38,10 @@ jobs:
           git add .
           git commit -m "Update Helm chart repository index" || echo "No changes to commit"
           git push -u https://${{ secrets.HELM_TOKEN }}@github.com/Gad-Ongoro/helm-charts.git gh-pages
+
+      - name: Merge gh-pages into main
+        run: |
+          git fetch origin
+          git checkout main
+          git merge origin/gh-pages --strategy-option theirs --no-ff --allow-unrelated-histories --commit -m "Auto-merge from development to main"
+          git push origin main
