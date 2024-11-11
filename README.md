@@ -29,12 +29,16 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 
 helm package <path-to-helm-chart>
 
+helm package gochart -d ./docs
+
+helm repo index ./docs --url https://Gad-Ongoro.github.io/helm-charts/
+
 helm install <release-name> <path-to-helm-chart.tgz>
 ```
 
 ## if using existing chart:
 ```bash
-helm repo add gocharts https://Gad-Ongoro.github.io/helm-charts
+helm repo add gocharts https://gad-ongoro.github.io/helm-charts/
 
 helm repo update
 
