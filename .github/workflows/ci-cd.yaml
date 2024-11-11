@@ -30,13 +30,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Add SSH key for GitHub Actions
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
       - name: Commit and push to gh-pages
         run: |
           git fetch origin
@@ -44,4 +37,4 @@ jobs:
           cp -r ./docs/* .
           git add .
           git commit -m "Update Helm chart repository index" || echo "No changes to commit"
-          git push origin gh-pages
+          git push -u https://${{ secrets.HELM_TOKEN }}@github.com/Gad-Ongoro/helm-charts.git gh-pages
