@@ -23,6 +23,10 @@ minikube start
 
 kubectl config use-context minikube
 
+kubectl create secret generic go-secrets --from-env-file=gofoods.env
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
 helm package <path-to-helm-chart>
 
 helm install <release-name> <path-to-helm-chart.tgz>
@@ -35,4 +39,22 @@ helm repo add gocharts https://Gad-Ongoro.github.io/helm-charts
 helm repo update
 
 helm install server gocharts/gochart
+```
+
+## CI/CD act Test
+```bash
+export SSH_PRIVATE_KEY=$(cat ~/.ssh/id_rsa)
+
+export HELM_TOKEN=(access_token)
+
+act -s HELM_TOKEN -s SSH_PRIVATE_KEY
+```
+
+if error dial unix /var/run/docker.sock: connect: permission denied:
+```bash
+$ which act
+
+>_ output/.../act
+
+$ sudo output /.../act -s HELM_TOKEN -s SSH_PRIVATE_KEY
 ```
